@@ -20,9 +20,9 @@ namespace Business.Concreate
             _orderRepository = orderRepository;
             _mapper = mapper;
         }
-        public async Task<bool> AddAsync(OrderCreate value)
+        public async Task<OrderModel> AddAsync(OrderCreate value)
         {
-            return await _orderRepository.AddAsync(_mapper.Map<Order>(value));
+            return _mapper.Map<OrderModel>(await _orderRepository.AddAsync(_mapper.Map<Order>(value)));
         }
 
         public async Task<bool> DeleteAsync(OrderModel value)
@@ -38,6 +38,14 @@ namespace Business.Concreate
             return _mapper.Map<IList<OrderModel>>(result);
         }
 
+        public async Task<IList<OrderModel>> GetBayCategoryId(string categoryId)
+        {
+            var result = await _orderRepository.GetByCategoryId(categoryId);
+            foreach (var item in result)
+                item.Category = await _categoryRepository.GetByIdAsync(item.CategoryId);
+            return _mapper.Map<IList<OrderModel>>(result);
+        }
+
         public async Task<OrderModel> GetByIdAsync(string id)
         {
             var result = await _orderRepository.GetByIdAsync(id);
@@ -45,9 +53,9 @@ namespace Business.Concreate
             return _mapper.Map<OrderModel>(result);
         }
 
-        public async Task<bool> UpdateAsync(OrderUpdate value)
+        public async Task<OrderModel> UpdateAsync(OrderUpdate value)
         {
-            return await _orderRepository.UpdateAsync(_mapper.Map<Order>(value));
+            return _mapper.Map<OrderModel>(await _orderRepository.UpdateAsync(_mapper.Map<Order>(value)));
         }
     }
 }

@@ -9,7 +9,7 @@ namespace Data.MongoDb.Concreate
 {
     public class BaseRepository<T> : IBaseRepository<T> where T : IEntity
     {
-        private readonly IMongoCollection<T> _collection;
+        internal readonly IMongoCollection<T> _collection;
         public BaseRepository()
         {
             var connectionString = "mongodb://localhost:27017";
@@ -17,16 +17,16 @@ namespace Data.MongoDb.Concreate
             var database = client.GetDatabase("MongoExample");
             _collection = database.GetCollection<T>(typeof(T).Name);
         }
-        public async Task<bool> AddAsync(T value)
+        public async Task<T> AddAsync(T value)
         {
             try
             {
                 await _collection.InsertOneAsync(value);
-                return true;
+                return value;
             }
             catch (Exception)
             {
-                return false;
+                return default(T);
             }
         }
 
@@ -35,8 +35,8 @@ namespace Data.MongoDb.Concreate
             try
             {
                 var filter = Builders<T>.Filter.Eq(x => x.Id, value.Id);
-                await _collection.DeleteOneAsync(filter);
-                return true;
+                var result = await _collection.DeleteOneAsync(filter);
+                return result.DeletedCount > 0;
             }
             catch (Exception)
             {
@@ -56,17 +56,18 @@ namespace Data.MongoDb.Concreate
             return result;
         }
 
-        public async Task<bool> UpdateAsync(T value)
+        public async Task<T> UpdateAsync(T value)
         {
             try
             {
                 var filter = Builders<T>.Filter.Eq(x => x.Id, value.Id);
-                await _collection.ReplaceOneAsync(filter, value);
-                return true;
+                var result = await _collection.ReplaceOneAsync(filter, value);
+
+                return value;
             }
             catch (Exception)
             {
-                return false;
+                return default(T);
             }
         }
     }

@@ -7,8 +7,8 @@ namespace Business.Abstruct
     {
         Task<IList<T>> GetAllAsync();
         Task<T> GetByIdAsync(string id);
-        Task<bool> AddAsync(CT value);
-        Task<bool> UpdateAsync(UT value);
+        Task<T> AddAsync(CT value);
+        Task<T> UpdateAsync(UT value);
         Task<bool> DeleteAsync(T value);
     }
 }

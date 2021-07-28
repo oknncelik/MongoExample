@@ -18,9 +18,9 @@ namespace Business.Concreate
             _categoryRepository = categoryRepository;
             _mapper = mapper;
         }
-        public async Task<bool> AddAsync(CategoryCreate value)
+        public async Task<CategoryModel> AddAsync(CategoryCreate value)
         {
-            return await _categoryRepository.AddAsync(_mapper.Map<Category>(value));
+            return _mapper.Map<CategoryModel>(await _categoryRepository.AddAsync(_mapper.Map<Category>(value)));
         }
 
         public async Task<bool> DeleteAsync(CategoryModel value)
@@ -38,9 +38,9 @@ namespace Business.Concreate
             return _mapper.Map<CategoryModel>(await _categoryRepository.GetByIdAsync(id));
         }
 
-        public async Task<bool> UpdateAsync(CategoryUpdate value)
+        public async Task<CategoryModel> UpdateAsync(CategoryUpdate value)
         {
-            return await _categoryRepository.UpdateAsync(_mapper.Map<Category>(value));
+            return _mapper.Map<CategoryModel>(await _categoryRepository.UpdateAsync(_mapper.Map<Category>(value)));
         }
     }
 }

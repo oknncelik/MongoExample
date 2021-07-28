@@ -28,6 +28,12 @@ namespace Api.Controllers
             return Ok(await _orderService.GetByIdAsync(id));
         }
 
+        [HttpGet("getbycategoryid")]
+        public async Task<IActionResult> GetByCategoryId(string categoryId)
+        {
+            return Ok(await _orderService.GetBayCategoryId(categoryId));
+        }
+
         [HttpPut("update")]
         public async Task<IActionResult> Update(OrderUpdate order)
         {
