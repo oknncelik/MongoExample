@@ -3,6 +3,7 @@ using Business.Concreate;
 using Business.Mapping;
 using Data.MongoDb.Abstruct;
 using Entities;
+using Entities.Dtos;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System.Collections.Generic;
@@ -84,6 +85,9 @@ namespace Business.Tests
             _categoryRepository.Setup(x => x.GetByIdAsync(It.IsAny<string>())).Returns<string>((id) => Task.Run(() => _categories.FirstOrDefault(x=> x.Id == id)));
             _orderRepository.Setup(x => x.GetAllAsync()).Returns(Task.Run(() => _orders));
             _orderRepository.Setup(x => x.GetByIdAsync(It.IsAny<string>())).Returns<string>((id) => Task.Run(() => _orders.FirstOrDefault(x => x.Id == id)));
+            _orderRepository.Setup(x => x.AddAsync(It.IsAny<Order>())).Returns<Order>((order) => Task.Run(() => order));
+            _orderRepository.Setup(x => x.UpdateAsync(It.IsAny<Order>())).Returns<Order>((order) => Task.Run(() => order));
+            _orderRepository.Setup(x => x.DeleteAsync(It.IsAny<Order>()));
         }
 
         [TestMethod]
@@ -100,6 +104,33 @@ namespace Business.Tests
             OrderService service = new OrderService(_categoryRepository.Object, _orderRepository.Object, _mapper);
             var result = service.GetByIdAsync("1");
             Assert.IsNotNull(result.Result);
+        }
+
+        [TestMethod]
+        public void AddAsync()
+        {
+            OrderService service = new OrderService(_categoryRepository.Object, _orderRepository.Object, _mapper);
+            var result = service.AddAsync(new OrderCreate 
+            { 
+                Name = "Test 5",
+                Description = "Description 5",
+                CategoryId = "1"
+            });
+            Assert.IsNotNull(result.Result);
+        }
+
+        [TestMethod]
+        public void UpdateAsync()
+        {
+            OrderService service = new OrderService(_categoryRepository.Object, _orderRepository.Object, _mapper);
+            var result = service.UpdateAsync(new OrderUpdate
+            {
+                Id="4",
+                Name = "Test 4",
+                Description = "Description 5",
+                CategoryId = "1"
+            });
+            Assert.AreEqual("Description 5", result.Result.Description);
         }
     }
 }
