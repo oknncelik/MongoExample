@@ -22,7 +22,9 @@ namespace Business.Concreate
         }
         public async Task<OrderModel> AddAsync(OrderCreate value)
         {
-            return _mapper.Map<OrderModel>(await _orderRepository.AddAsync(_mapper.Map<Order>(value)));
+            var result = await _orderRepository.AddAsync(_mapper.Map<Order>(value));
+            result.Category = await _categoryRepository.GetByIdAsync(result.CategoryId);
+            return _mapper.Map<OrderModel>(result);
         }
 
         public async Task<bool> DeleteAsync(OrderModel value)
@@ -55,7 +57,9 @@ namespace Business.Concreate
 
         public async Task<OrderModel> UpdateAsync(OrderUpdate value)
         {
-            return _mapper.Map<OrderModel>(await _orderRepository.UpdateAsync(_mapper.Map<Order>(value)));
+            var result = await _orderRepository.UpdateAsync(_mapper.Map<Order>(value));
+            result.Category = await _categoryRepository.GetByIdAsync(result.CategoryId);
+            return _mapper.Map<OrderModel>(result);
         }
     }
 }

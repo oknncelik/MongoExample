@@ -7,11 +7,11 @@ namespace Api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class CampanyController : ControllerBase
+    public class CategoryController : ControllerBase
     {
         private readonly ICategoryService _categoryService;
 
-        public CampanyController(ICategoryService categoryService)
+        public CategoryController(ICategoryService categoryService)
         {
             _categoryService = categoryService;
         }
