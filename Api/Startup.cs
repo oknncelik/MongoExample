@@ -3,6 +3,7 @@ using Business.Concreate;
 using Business.Mapping;
 using Data.MongoDb.Abstruct;
 using Data.MongoDb.Concreate;
+using Medialyzer.Data.MongoDb;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -32,6 +33,7 @@ namespace Api
             services.AddScoped<IOrderService, OrderService>();
 
             services.AddControllers();
+            services.AddHostedService<MongoDbIndexer>();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Api", Version = "v1" });
