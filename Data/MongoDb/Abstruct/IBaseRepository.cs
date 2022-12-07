@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using MongoDB.Driver;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Data.MongoDb.Abstruct
@@ -10,5 +11,6 @@ namespace Data.MongoDb.Abstruct
         Task<T> AddAsync(T value);
         Task<T> UpdateAsync(T value);
         Task<bool> DeleteAsync(T value);
+        IMongoCollection<T> GetCollection<T>();
     }
 }

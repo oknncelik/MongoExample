@@ -17,7 +17,16 @@ namespace Data.MongoDb.Concreate
          var database = client.GetDatabase("MongoExample");
          _collection = database.GetCollection<T>(typeof(T).Name);
       }
-      public async Task<T> AddAsync(T value)
+
+        public IMongoCollection<T> GetCollection<T>()
+        {
+            var connectionString = "mongodb://localhost:27017";
+            var client = new MongoClient(connectionString);
+            var database = client.GetDatabase("MongoExample");
+            return database.GetCollection<T>(typeof(T).Name);
+        }
+
+        public async Task<T> AddAsync(T value)
       {
          try
          {
